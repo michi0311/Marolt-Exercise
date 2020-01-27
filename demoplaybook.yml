@@ -1,0 +1,19 @@
+---
+- name: 'demo'
+  hosts: local
+  become: no
+  gather_facts: no
+  connection: local
+  vars:
+    msg: "This is a container"
+  tasks:
+    - name: Install the dependencies
+      pip:
+        state: present
+        name: docker-py
+
+    - name: Create a data container
+      docker_container:
+        name: ansibledemo
+        image: ubuntu:18.04
+        command: hash -c "sleep 30000 && apt-get update && apt-get install nginx; nginx"
